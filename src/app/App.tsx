@@ -47,11 +47,11 @@ export const App = (): ReactElement => {
     setRooms,
   };
   const connectSocket = async (): Promise<void> => {
-    await SocketServiceInstance.connect(
-      'https://serverwebsockettiktacktoe.herokuapp.com/' || '',
-    ).catch((error: string) => {
-      setMessageAboutGame(error);
-    });
+    await SocketServiceInstance.connect(process.env.REACT_APP_WEB_SOCKET_API || '').catch(
+      (error: string) => {
+        setMessageAboutGame(error);
+      },
+    );
   };
 
   useEffect(() => {
