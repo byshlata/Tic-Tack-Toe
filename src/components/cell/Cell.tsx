@@ -31,7 +31,12 @@ export const Cell = ({
       }}
       className={style.cell}
     >
-      <button className={style.button} type="button" onClick={onChangeCell}>
+      <button
+        className={style.button}
+        type="button"
+        onClick={onChangeCell}
+        disabled={!!value}
+      >
         {/* eslint-disable-next-line no-nested-ternary */}
         {value === 1 ? 'x' : value === -1 ? 'o' : ''}
       </button>

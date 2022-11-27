@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 
-import { message } from 'antd';
+import { Button, message } from 'antd';
 
 import { GameServiceInstance, SocketServiceInstance } from 'api';
 import style from 'components/game/Game.module.sass';
@@ -38,6 +38,7 @@ export const Game = (): ReactElement => {
 
   useEffect(() => {
     if (messageAboutGame) {
+      setPlayerTurn(true);
       onMessageAboutGame(messageAboutGame);
     }
   }, [messageAboutGame]);
@@ -65,7 +66,6 @@ export const Game = (): ReactElement => {
   const handleGameWin = (): void => {
     if (SocketServiceInstance.socket)
       GameServiceInstance.onGameWin(SocketServiceInstance.socket, messageGame => {
-        setPlayerTurn(false);
         setMessageAboutGame(messageGame);
       });
   };
@@ -103,9 +103,13 @@ export const Game = (): ReactElement => {
   };
 
   return (
-    <>
+    <div className={style.container}>
       {contextHolder}
-      {!isGameStarted && <h2>Waiting for Other Player to Join to Start the Game!</h2>}
+      {!isGameStarted && (
+        <h4 className={style.title}>
+          Waiting for Other Player to Join to Start the Game!
+        </h4>
+      )}
       {(!isGameStarted || !isPlayerTurn) && <PlayStopper />}
       <div className={style.gameContainer}>
         {matrix.map((row, rowIdx) =>
@@ -120,6 +124,11 @@ export const Game = (): ReactElement => {
           )),
         )}
       </div>
-    </>
+      {messageAboutGame && (
+        <Button type="primary" onClick={() => document.location.reload()}>
+          New game
+        </Button>
+      )}
+    </div>
   );
 };
